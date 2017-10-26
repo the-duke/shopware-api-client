@@ -1,4 +1,5 @@
-const request = require('request-promise-native')
+const request = require('request-promise-native'),
+      queryString = require('querystring');
 
 const ERROR = {
   MISSING_ID: {
@@ -39,7 +40,35 @@ class Shopware {
     })
   }
 
+  _buildQueryString (queryArray) {
+    let resultString = '';
+    for (var queryPartName in queryArray) {
+      if (queryArray.hasOwnProperty(queryPartName)) {
+        const queryPartValues = queryArray[queryPartName];
+        switch (queryPartName) {
+          case 'filter':
+            queryPartValues.forEach((queryPartValue, queryPartIndex) => {
+              const queryResPrefix = queryPartName + '[' + queryPartIndex + ']'
+              for (var queryPartValueKey in queryPartValue) {
+                if (queryPartValue.hasOwnProperty(queryPartValueKey)) {
+                  resultString += (resultString === '')? '' : '&';
+                  resultString += queryResPrefix + '[' + queryPartValueKey + ']=' + queryString.escape(queryPartValue[queryPartValueKey]);
+                }
+              }
+            });
+            break;
+          default:
+
+        }
+      }
+    }
+    return resultString;
+  }
+
   handleRequest(config, selector) {
+    if (config.qs) {
+      config.url = config.url + '?' + this._buildQueryString(config.qs);
+    }
     return new Promise((resolve, reject) => {
       this.request(config)
         .then(res => {
