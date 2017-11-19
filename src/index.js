@@ -884,6 +884,88 @@ class Shopware {
     })
   }
 
+  getSuppliers(params) {
+    return this.handleRequest({
+      url: 'suppliers/',
+      method: 'GET',
+      qs: params
+    }, 'data')
+  }
+
+  getSupplier(id) {
+    if (!id) {
+      return handleError(ERROR.MISSING_ID)
+    }
+
+    return this.handleRequest({
+      url: `suppliers/${id}`,
+      method: 'GET'
+    }, 'data')
+  }
+
+  deleteSupplier(id) {
+    if (!id) {
+      return handleError(ERROR.MISSING_ID)
+    }
+
+    return this.handleRequest({
+      url: `suppliers/${id}`,
+      method: 'DELETE'
+    })
+  }
+
+  deleteSuppliers(ids) {
+    if (!ids) {
+      return handleError(ERROR.MISSING_ID)
+    }
+
+    return this.handleRequest({
+      url: 'suppliers/',
+      method: 'DELETE',
+      ids
+    })
+  }
+
+  createSupplier(body) {
+    if (!body) {
+      return handleError(ERROR.MISSING_BODY)
+    }
+
+    return this.handleRequest({
+      url: 'suppliers/',
+      method: 'POST',
+      body
+    })
+  }
+
+  updateSupplier(id, body) {
+    if (!id) {
+      return handleError(ERROR.MISSING_ID)
+    }
+
+    if (!body) {
+      return handleError(ERROR.MISSING_BODY)
+    }
+
+    return this.handleRequest({
+      url: `suppliers/${id}`,
+      method: 'PUT',
+      body
+    })
+  }
+
+  updateSuppliers(body) {
+    if (!body) {
+      return handleError(ERROR.MISSING_BODY)
+    }
+
+    return this.handleRequest({
+      url: 'suppliers/',
+      method: 'PUT',
+      body
+    })
+  }
+
 }
 
 module.exports = Shopware
